@@ -10,7 +10,7 @@ const scryptOptions = {
   r: 8,
   p: 1,
 };
-const secretKey = Buffer.from(process.env.SECRET_KEY || "Story Teller", "base64");
+const secretKey = crypto.randomBytes(32);
 
 /**
  * Gets a randomized salt for a new password

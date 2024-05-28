@@ -2,34 +2,33 @@ const db = require("../models");
 const { authenticate } = require("../authentication/authentication");
 const User = db.user;
 const Session = db.session;
-const Op = db.Sequelize.Op;
 const { encrypt } = require("../authentication/crypto");
 
 exports.login = async (req, res) => {
-  let { userId } = await authenticate(req, res, "credentials");
+  
+  let { userId } = await authenticate(req, res);
 
   if (userId !== undefined) {
     let user = {};
     await User.findByPk(userId).then((data) => {
       user = data;
     });
-
     let expireTime = new Date();
     expireTime.setDate(expireTime.getDate() + 1);
 
     const session = {
       email: user.email,
-      userId: userId,
-      expirationDate: expireTime,
+      user_id: userId,
+      expiration_date: expireTime,
     };
     await Session.create(session).then(async (data) => {
       let sessionId = data.id;
       let token = await encrypt(sessionId);
       let userInfo = {
         email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        id: user.id,
+        name: user.name,
+        id: user.user_id,
+        role_id: user.role_id,
         token: token,
       };
       res.send(userInfo);

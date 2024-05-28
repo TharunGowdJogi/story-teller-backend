@@ -1,11 +1,11 @@
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
   const Session = sequelize.define("session", {
     email: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
-    expirationDate: {
-      type: Sequelize.DATE,
+    expiration_date: {
+      type: DataTypes.DATE,
       allowNull: false,
     },
   });

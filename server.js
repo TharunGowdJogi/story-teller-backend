@@ -7,7 +7,7 @@ const app = express();
 
 const db = require("./app/models");
 
-// db.sequelize.sync();
+db.sequelize.sync();
 
 var corsOptions = {
   origin: "*",

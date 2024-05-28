@@ -5,17 +5,13 @@ const Op = db.Sequelize.Op;
 const { encrypt, getSalt, hashPassword } = require("../authentication/crypto");
 
 // Create and Save a new User
-exports.create = async (req, res) => {
+exports.createUser = async (req, res) => {
   // Validate request
-  if (req.body.firstName === undefined) {
-    const error = new Error("First name cannot be empty for user!");
+  if (req.body.name === undefined) {
+    const error = new Error("name cannot be empty for user!");
     error.statusCode = 400;
     throw error;
-  } else if (req.body.lastName === undefined) {
-    const error = new Error("Last name cannot be empty for user!");
-    error.statusCode = 400;
-    throw error;
-  } else if (req.body.email === undefined) {
+  }  else if (req.body.email === undefined) {
     const error = new Error("Email cannot be empty for user!");
     error.statusCode = 400;
     throw error;
@@ -43,10 +39,10 @@ exports.create = async (req, res) => {
         // Create a User
         const user = {
           id: req.body.id,
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
+          name: req.body.name,
           email: req.body.email,
           password: hash,
+          role_id: req.body.role_id || 1,
           salt: salt,
         };
 
@@ -54,24 +50,24 @@ exports.create = async (req, res) => {
         await User.create(user)
           .then(async (data) => {
             // Create a Session for the new user
-            let userId = data.id;
+            let user_id = data.user_id;
 
             let expireTime = new Date();
             expireTime.setDate(expireTime.getDate() + 1);
 
             const session = {
               email: req.body.email,
-              userId: userId,
-              expirationDate: expireTime,
+              user_id: user_id,
+              expiration_date: expireTime,
             };
             await Session.create(session).then(async (data) => {
               let sessionId = data.id;
               let token = await encrypt(sessionId);
               let userInfo = {
                 email: user.email,
-                firstName: user.firstName,
-                lastName: user.lastName,
+                name: user.name,
                 id: user.id,
+                role_id: user.role_id,
                 token: token,
               };
               res.send(userInfo);
@@ -92,7 +88,7 @@ exports.create = async (req, res) => {
 };
 
 // Retrieve all Users from the database.
-exports.findAll = (req, res) => {
+exports.getAllUsers = (req, res) => {
   const id = req.query.id;
   var condition = id ? { id: { [Op.like]: `%${id}%` } } : null;
 
@@ -108,7 +104,7 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single User with an id
-exports.findOne = (req, res) => {
+exports.getUserById = (req, res) => {
   const id = req.params.id;
 
   User.findByPk(id)
@@ -129,7 +125,7 @@ exports.findOne = (req, res) => {
 };
 
 // Find a single User with an email
-exports.findByEmail = (req, res) => {
+exports.getUserByEmail = (req, res) => {
   const email = req.params.email;
 
   User.findOne({
@@ -155,7 +151,7 @@ exports.findByEmail = (req, res) => {
 };
 
 // Update a User by the id in the request
-exports.update = (req, res) => {
+exports.updateUser = (req, res) => {
   const id = req.params.id;
 
   User.update(req.body, {
@@ -180,7 +176,7 @@ exports.update = (req, res) => {
 };
 
 // Delete a User with the specified id in the request
-exports.delete = (req, res) => {
+exports.deleteUser = (req, res) => {
   const id = req.params.id;
 
   User.destroy({
@@ -205,7 +201,7 @@ exports.delete = (req, res) => {
 };
 
 // Delete all People from the database.
-exports.deleteAll = (req, res) => {
+exports.deleteAllUsers = (req, res) => {
   User.destroy({
     where: {},
     truncate: false,

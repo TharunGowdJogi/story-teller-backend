@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       role_name: {
         type: DataTypes.STRING(50),
         allowNull: false,
+        unique: true,
       },
     });
   

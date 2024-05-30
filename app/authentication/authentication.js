@@ -15,7 +15,7 @@ authenticate = async (req, res) => {
     .catch((error) => {
       console.log(error);
     });
-  if (user != null) {
+  if (user && user.user_id) {
     let hash = await hashPassword(password, user.salt);
     if (Buffer.compare(user.password, hash) !== 0) {
       return res.status(401).send({

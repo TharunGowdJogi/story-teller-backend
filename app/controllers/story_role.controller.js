@@ -9,6 +9,7 @@ exports.getAllRoles = (req, res) => {
       res.send(data);
     })
     .catch((err) => {
+      console.log("get all roles Error: ",err)
       res.status(500).send({
         message: err.message || "Some error occurred while retrieving roles.",
       });

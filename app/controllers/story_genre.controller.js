@@ -8,6 +8,7 @@ exports.getAllGenres = (req, res) => {
       res.send(data);
     })
     .catch((err) => {
+      console.log("get all genres Error: ",err)
       res.status(500).send({
         message: err.message || "Some error occurred while retrieving genres.",
       });

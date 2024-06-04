@@ -74,7 +74,7 @@ exports.createUser = async (req, res) => {
             });
           })
           .catch((err) => {
-            console.log(err);
+            console.log("Creaing user Error: ",err);
             res.status(500).send({
               message:
                 err.message || "Some error occurred while creating the User.",
@@ -83,6 +83,7 @@ exports.createUser = async (req, res) => {
       }
     })
     .catch((err) => {
+      console.log("Error retrieving User with email= ",email,". Error: ",err);
       return err.message || "Error retrieving User with email=" + email;
     });
 };
@@ -97,6 +98,7 @@ exports.getAllUsers = (req, res) => {
       res.send(data);
     })
     .catch((err) => {
+      console.log("get all users Error: ",err)
       res.status(500).send({
         message: err.message || "Some error occurred while retrieving users.",
       });
@@ -118,6 +120,7 @@ exports.getUserById = (req, res) => {
       }
     })
     .catch((err) => {
+      console.log("get user by id Error: ",err)
       res.status(500).send({
         message: err.message || "Error retrieving User with id = " + id,
       });
@@ -144,6 +147,7 @@ exports.getUserByEmail = (req, res) => {
       }
     })
     .catch((err) => {
+      console.log("get user by email Error: ",err)
       res.status(500).send({
         message: err.message || "Error retrieving User with email=" + email,
       });
@@ -169,6 +173,7 @@ exports.updateUser = (req, res) => {
       }
     })
     .catch((err) => {
+      console.log("user update Error: ",err)
       res.status(500).send({
         message: err.message || "Error updating User with id =" + id,
       });
@@ -194,6 +199,7 @@ exports.deleteUser = (req, res) => {
       }
     })
     .catch((err) => {
+      console.log("deleting the user Error: ",err)
       res.status(500).send({
         message: err.message || "Could not delete User with id = " + id,
       });
@@ -210,6 +216,7 @@ exports.deleteAllUsers = (req, res) => {
       res.send({ message: `${number} People were deleted successfully!` });
     })
     .catch((err) => {
+      console.log("delete all users Error: ",err)
       res.status(500).send({
         message:
           err.message || "Some error occurred while removing all people.",

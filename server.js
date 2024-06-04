@@ -28,6 +28,11 @@ app.get("/", (req, res) => {
 });
 
 require("./app/routes/auth.routes.js")(app);
+require("./app/routes/bedtime_stories.routes.js")(app);
+require("./app/routes/story_country.routes.js")(app);
+require("./app/routes/story_genre.routes.js")(app);
+require("./app/routes/story_role.routes.js")(app);
+require("./app/routes/story_language.routes.js")(app);
 require("./app/routes/user.routes.js")(app);
 
 // set port, listen for requests

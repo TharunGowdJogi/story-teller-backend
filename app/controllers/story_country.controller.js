@@ -8,6 +8,7 @@ exports.getAllCountries = (req, res) => {
       res.send(data);
     })
     .catch((err) => {
+      console.log("get all countries Error: ",err)
       res.status(500).send({
         message: err.message || "Some error occurred while retrieving countries.",
       });

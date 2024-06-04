@@ -92,6 +92,7 @@ exports.createStory = async (req, res) => {
     const data = await BedtimeStory.create(story);
     res.send(data);
   } catch (err) {
+    console.log("create story Error: ",err)
     res.status(500).send({
       message: err.message || "Some error occurred while creating the Bedtime Story.",
     });
@@ -134,6 +135,7 @@ exports.getAllStories = (req, res) => {
       res.send(data);
     })
     .catch((err) => {
+      console.log("get all Stories Error: ",err)
       res.status(500).send({
         message: err.message || "Some error occurred while retrieving stories.",
       });
@@ -162,6 +164,7 @@ BedtimeStory.findByPk(id,{
     }
   })
   .catch((err) => {
+    console.log("get story by Id Error: ",err)
     res.status(500).send({
       message: err.message || "Error retrieving Bedtime Story with id = " + id,
     });

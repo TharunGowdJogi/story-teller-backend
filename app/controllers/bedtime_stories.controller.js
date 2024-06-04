@@ -7,8 +7,12 @@ const StoryRole = db.story_role;
 const StoryCountry = db.story_country;
 const { CohereClient } = require('cohere-ai');
 
+require('dotenv').config();
+
+const cohereKey = process.env.COHERE_KEY || "";
+
 const cohere = new CohereClient({
-  token: '',
+  token: cohereKey,
 })
 
 // Create and Save a new Bedtime Story
@@ -92,5 +96,75 @@ exports.createStory = async (req, res) => {
       message: err.message || "Some error occurred while creating the Bedtime Story.",
     });
   }
+};
+
+
+// Retrieve all Bedtime Stories from the database.
+exports.getAllStories = (req, res) => {
+  const { language_id, genre_id, country_id, role_id, title, author_id } = req.query;
+
+  let condition = {};
+
+  if (language_id) {
+    condition.language_id = language_id;
+  }
+
+  if (genre_id) {
+    condition.genre_id = genre_id;
+  }
+
+  if (country_id) {
+    condition.country_id = country_id;
+  }
+
+  if (role_id) {
+    condition.role_id = role_id;
+  }
+
+  if(author_id) {
+    condition.author_id = author_id;
+  }
+
+  if (title) {
+    condition.title = { [Op.like]: `%${title}%` };
+  }
+
+  BedtimeStory.findAll({ where: condition })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving stories.",
+      });
+    });
+};
+
+// Find a single Bedtime Story with an id
+exports.getStoryById = (req, res) => {
+const id = req.params.id;
+
+BedtimeStory.findByPk(id,{
+  include: [
+    { model: StoryGenre, as: 'story_genre' },
+    { model: StoryCountry, as: 'story_country' },
+    { model: StoryRole, as: 'story_role' },
+    { model: StoryLanguage, as: 'story_language' },
+  ]
+})
+  .then((data) => {
+    if (data) {
+      res.send(data);
+    } else {
+      res.status(404).send({
+        message: `Cannot find Bedtime Story with id = ${id}.`,
+      });
+    }
+  })
+  .catch((err) => {
+    res.status(500).send({
+      message: err.message || "Error retrieving Bedtime Story with id = " + id,
+    });
+  });
 };
 

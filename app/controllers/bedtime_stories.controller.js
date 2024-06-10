@@ -107,19 +107,19 @@ exports.getAllStories = (req, res) => {
   let condition = {};
 
   if (language_id) {
-    condition.language_id = language_id;
+    condition.story_language_id = language_id;
   }
 
   if (genre_id) {
-    condition.genre_id = genre_id;
+    condition.story_genre_id = genre_id;
   }
 
   if (country_id) {
-    condition.country_id = country_id;
+    condition.story_country_id = country_id;
   }
 
   if (role_id) {
-    condition.role_id = role_id;
+    condition.story_role_id = role_id;
   }
 
   if(author_id) {

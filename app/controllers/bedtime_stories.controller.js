@@ -107,19 +107,19 @@ exports.getAllStories = (req, res) => {
   let condition = {};
 
   if (language_id) {
-    condition.language_id = language_id;
+    condition.story_language_id = language_id;
   }
 
   if (genre_id) {
-    condition.genre_id = genre_id;
+    condition.story_genre_id = genre_id;
   }
 
   if (country_id) {
-    condition.country_id = country_id;
+    condition.story_country_id = country_id;
   }
 
   if (role_id) {
-    condition.role_id = role_id;
+    condition.story_role_id = role_id;
   }
 
   if(author_id) {
@@ -170,4 +170,71 @@ BedtimeStory.findByPk(id,{
     });
   });
 };
+
+// Update a Bedtime Story by the id in the request
+exports.updateStory = (req, res) => {
+  const id = req.params.id;
+
+  BedtimeStory.update(req.body, {
+    where: { story_id: id },
+  })
+    .then((num) => {
+      if (num == 1) {
+        res.send({
+          message: "Bedtime Story was updated successfully.",
+        });
+      } else {
+        res.send({
+          message: `Cannot update Bedtime Story with id = ${id}. Maybe Bedtime Story was not found or req.body is empty!`,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Error updating Bedtime Story with id = " + id,
+      });
+    });
+};
+
+// Delete a Bedtime Story with the specified id in the request
+exports.deleteStory = (req, res) => {
+  const id = req.params.id;
+
+  BedtimeStory.destroy({
+    where: { story_id: id },
+  })
+    .then((num) => {
+      if (num == 1) {
+        res.send({
+          message: "Bedtime Story was deleted successfully!",
+        });
+      } else {
+        res.send({
+          message: `Cannot delete Bedtime Story with id = ${id}. Maybe Bedtime Story was not found!`,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Could not delete Bedtime Story with id = " + id,
+      });
+    });
+};
+
+// Delete all Bedtime Stories from the database.
+exports.deleteAllStories = (req, res) => {
+  BedtimeStory.destroy({
+    where: {},
+    truncate: false,
+  })
+    .then((nums) => {
+      res.send({ message: `${nums} Bedtime Stories were deleted successfully!` });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while removing all stories.",
+      });
+    });
+};
+
 

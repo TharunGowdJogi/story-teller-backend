@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       genre_name: {
         type: DataTypes.STRING(100),
         allowNull: false,
+        unique: true,
       },
     });
   

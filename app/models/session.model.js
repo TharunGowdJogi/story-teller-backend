@@ -3,6 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     expiration_date: {
       type: DataTypes.DATE,

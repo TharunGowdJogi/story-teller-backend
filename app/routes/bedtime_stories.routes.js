@@ -4,6 +4,7 @@ module.exports = (app) => {
 
   bedtimeStoryRouter.post("/stories/", createStory);
   bedtimeStoryRouter.get("/stories/", getAllStories);
+  bedtimeStoryRouter.get("/stories/recommendations/:userId", getRecommendations);
   bedtimeStoryRouter.get("/stories/:id", getStoryById);
   bedtimeStoryRouter.put("/stories/:id", updateStory);
   bedtimeStoryRouter.delete("/stories/:id", deleteStory);

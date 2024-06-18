@@ -6,6 +6,9 @@ const StoryLanguage = db.story_language;
 const StoryRole = db.story_role;
 const StoryCountry = db.story_country;
 const { CohereClient } = require('cohere-ai');
+const Sequelize = db.Sequelize;
+const Op = db.Sequelize.Op;
+
 
 require('dotenv').config();
 

@@ -1,5 +1,5 @@
 module.exports = (app) => {
-  const { createStory, getAllStories, getStoryById, updateStory, deleteStory, deleteAllStories } = require("../controllers/bedtime_stories.controller.js");
+  const { createStory, getAllStories, getStoryById, updateStory, deleteStory, deleteAllStories, getRecommendations } = require("../controllers/bedtime_stories.controller.js");
   var bedtimeStoryRouter = require("express").Router();
 
   bedtimeStoryRouter.post("/stories/", createStory);

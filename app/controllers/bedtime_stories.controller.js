@@ -59,6 +59,7 @@ exports.createStory = async (req, res) => {
 
     // Create a prompt for the Cohere AI tool
     let prompt = `Craft a narrative`;
+    if(title) prompt += ` with title as ${title}`;
     if (genre) prompt += ` that falls under the genre of ${genre.genre_name}`;
     if (language) prompt += `, written in ${language.language_name}`;
     if (role) prompt += `, featuring the role of ${role.role_name}`;
@@ -133,7 +134,12 @@ exports.getAllStories = (req, res) => {
     condition.title = { [Op.like]: `%${title}%` };
   }
 
-  BedtimeStory.findAll({ where: condition })
+  BedtimeStory.findAll({ where: condition, include: [
+    { model: StoryGenre, as: 'story_genre' },
+    { model: StoryCountry, as: 'story_country' },
+    { model: StoryRole, as: 'story_role' },
+    { model: StoryLanguage, as: 'story_language' },
+  ] })
     .then((data) => {
       res.send(data);
     })
@@ -216,6 +222,7 @@ exports.updateStory = async (req, res) => {
 
     // Create a prompt to update the story
     let prompt = `Craft a narrative`;
+    if(title) prompt += ` with title as ${title}`;
     if (genre) prompt += ` that falls under the genre of ${genre.genre_name}`;
     if (language) prompt += `, written in ${language.language_name}`;
     if (role) prompt += `, featuring the role of ${role.role_name}`;
